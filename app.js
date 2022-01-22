@@ -1,29 +1,47 @@
-var createError = require("http-errors");
-var express = require("express");
-var { graphqlHTTP } = require("express-graphql");
+const createError = require("http-errors");
+const express = require("express");
+const { graphqlHTTP } = require("express-graphql");
 
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const path = require("path");
+const cookieParser = require("cookie-parser");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const schema = require("./schema/test");
 
-var app = express();
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+
+const app = express();
+const pool = require("./queries");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
+// app.use(logger); global middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/graphql", graphqlHTTP({}));
-app.use("/", indexRouter);
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
+app.use("/", logger, auth, indexRouter);
 app.use("/users", usersRouter);
+
+// app.use("/db", (req, res) => {
+//   pool.query("SELECT * FROM TESTTABLE", (error, result) => {
+//     if (error) {
+//       throw error;
+//     }
+//     res.send(result.rows);
+//   });
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -40,6 +58,19 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+function logger(req, res, next) {
+  console.log("log");
+  next();
+}
+
+function auth(req, res, next) {
+  if (req.query.admin === "true") {
+    next();
+    return;
+  }
+  res.status(500).send({ success: false, message: "Authentication required!" });
+}
 
 app.listen(8080, () => {
   console.log(`This app listening on port 8080`);
