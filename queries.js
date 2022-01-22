@@ -9,7 +9,6 @@ const db = {
   port: process.env.SERVER_PORT,
 };
 
-const pool = new Pool(db);
 const client = new Client(db);
 
 try {
@@ -19,12 +18,4 @@ try {
   console.log(error);
 }
 
-// getTest = (req, res) => {
-//   pool.query("SELECT * FROM TESTTABLE", (error, result) => {
-//     if (error) {
-//     }
-//     res.send(result.rows);
-//   });
-// };
-
-module.exports = pool;
+module.exports = client;

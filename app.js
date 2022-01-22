@@ -11,7 +11,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
 const app = express();
-const pool = require("./queries");
+const db = require("./queries");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -31,17 +31,8 @@ app.use(
     graphiql: true,
   })
 );
-app.use("/", logger, auth, indexRouter);
+app.use("/", auth, indexRouter);
 app.use("/users", usersRouter);
-
-// app.use("/db", (req, res) => {
-//   pool.query("SELECT * FROM TESTTABLE", (error, result) => {
-//     if (error) {
-//       throw error;
-//     }
-//     res.send(result.rows);
-//   });
-// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -58,11 +49,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-function logger(req, res, next) {
-  console.log("log");
-  next();
-}
 
 function auth(req, res, next) {
   if (req.query.admin === "true") {

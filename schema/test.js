@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const pool = require("../queries");
+const db = require("../queries");
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
 
@@ -21,9 +21,10 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLString } },
       async resolve(parent, args) {
         try {
-          const res = await pool.query(
+          const res = await db.query(
             `SELECT * FROM TESTTABLE WHERE id = ${args.id}`
           );
+          db.end();
           return res.rows[0];
         } catch (error) {
           throw error;
