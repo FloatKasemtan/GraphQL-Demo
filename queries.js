@@ -12,7 +12,7 @@ const db = {
 const client = new Client(db);
 
 try {
-  console.log("db connected");
+  console.log("Database connection is available!");
   client.connect();
 } catch (error) {
   console.log(error);

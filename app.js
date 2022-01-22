@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
+const port = 8080;
 const { graphqlHTTP } = require("express-graphql");
 
 const path = require("path");
@@ -57,8 +58,8 @@ function auth(req, res, next) {
   res.status(500).send({ success: false, message: "Authentication required!" });
 }
 
-app.listen(8080, () => {
-  console.log(`This app listening on port 8080`);
+app.listen(port, () => {
+  console.log(`This app listening on port ${port}`);
 });
 
 module.exports = app;

@@ -24,7 +24,6 @@ const RootQuery = new GraphQLObjectType({
           const res = await db.query(
             `SELECT * FROM TESTTABLE WHERE id = ${args.id}`
           );
-          db.end();
           return res.rows[0];
         } catch (error) {
           throw error;
