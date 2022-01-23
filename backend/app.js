@@ -31,7 +31,7 @@ app.use(
     graphiql: true,
   })
 );
-app.use("/", auth, indexRouter);
+app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
