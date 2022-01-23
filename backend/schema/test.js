@@ -1,7 +1,7 @@
 const graphql = require("graphql");
 const db = require("../queries");
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
 
 // Type
 const TestObjectType = new GraphQLObjectType({
@@ -18,7 +18,7 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     test: {
       type: TestObjectType,
-      args: { id: { type: GraphQLString } },
+      args: { id: { type: GraphQLID } },
       async resolve(parent, args) {
         try {
           const res = await db.query(
