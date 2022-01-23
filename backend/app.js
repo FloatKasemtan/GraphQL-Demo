@@ -6,7 +6,8 @@ const { graphqlHTTP } = require("express-graphql");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-const schema = require("./schema/test");
+const test_schema = require("./schema/test");
+const schema = require("./schema/schema");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -26,6 +27,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   "/graphql",
+  graphqlHTTP({
+    schema: test_schema,
+    graphiql: true,
+  })
+);
+
+app.use(
+  "/api",
   graphqlHTTP({
     schema,
     graphiql: true,
